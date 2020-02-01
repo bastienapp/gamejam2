@@ -91,13 +91,17 @@ Play.prototype.goto = function (unit, square) {
     let startY = unit.posY;
     let endX = square.positionX;
     let endY = square.positionY;
+    if (this.distance(endX, endY, startX, startY) <= unit.move) {
+        this._map[startX][startY].unit = undefined;
+        this._map[endX][endY].unit = unit;
+        unit.posX = endX;
+        unit.posY = endY;
+        this._draw();
+        this._selected = undefined;
+    } else {
 
-    this._map[startX][startY].unit = undefined;
-    this._map[endX][endY].unit = unit;
-    unit.posX = endX;
-    unit.posY = endY;
-    this._draw();
-    this._selected = undefined;
+        alert("C'est trop loin !!!");
+    }
 };
 
 Play.prototype.attack = function (unitCurrentPlayer, square) {
@@ -113,5 +117,10 @@ Play.prototype.disparition = function(square) {
     square.unit = undefined;
     this._map[square.positionX][square.positionY].unit = undefined;
     this._draw();
+};
+
+Play.prototype.distance = function(targetX, targetY, startX, startY) {
+
+    return Math.abs(targetX - startX) + Math.abs(targetY - startY);
 };
 
