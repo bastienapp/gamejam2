@@ -47,6 +47,9 @@ class Play {
                 if (square2.unit === undefined) {
                     console.log(this._selected);
                     this.goto(this._selected, square2);
+                    if(!this.checkAttack(this._playerTurn)) {
+                        this.switchPlayerTurn();
+                    }
                 } else if (square2.unit.player !== this._playerTurn) {
                     this.attack(this._selected, square2);
                 }
@@ -120,15 +123,7 @@ Play.prototype.attack = function (unitCurrentPlayer, square) {
     } else {
         alert("T'es trop loin pour attaquer cette unité");
     }
-    if (this._playerTurn === 1) {
-
-        this._playerTurn = 0;
-    } else {
-
-        this._playerTurn = 1;
-    }
-    this._selected = undefined;
-    this._alreadyMove = false;
+    this.switchPlayerTurn();
 };
 
 Play.prototype.disparition = function(square) {
@@ -142,5 +137,48 @@ Play.prototype.distance = function(targetX, targetY, startX, startY) {
     return Math.abs(targetX - startX) + Math.abs(targetY - startY);
 };
 
+Play.prototype.checkAttack = function(player) {
+    for(i = 0; i < this._gridSize; i++){
+        for(j = 0; j < this._gridSize; j++){
+            let unit = this._map[i][j].unit;
+            if(unit !==undefined && unit.player === player){
+                let possibleAttack = this.checkAttackOneUnit(unit);
+                if(possibleAttack){
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+};
 
+Play.prototype.checkAttackOneUnit = function(unit){
+    let playerPotentialyAttacked = 0;
+    if(unit.player === 0){
+        playerPotentialyAttacked = 1;
+    }
+    //lister les unités de ce jour
+    for(i = 0; i < this._gridSize; i++){
+        for(j = 0; j < this._gridSize; j++){
+            let unitAttackedPlayer = this._map[i][j].unit;
+            if(unit.unitAttackedPlayer === playerPotentialyAttacked){
+                if(this.distance(unit.posX, unit.posY, unitAttackedPlayer.posX, unitAttackedPlayer.posY) <= unit.reach){
+                    return true;
+                }
+            }
+        }
+    }
+    return false
+};
 
+Play.prototype.switchPlayerTurn = function () {
+    if (this._playerTurn === 1) {
+
+        this._playerTurn = 0;
+    } else {
+
+        this._playerTurn = 1;
+    }
+    this._selected = undefined;
+    this._alreadyMove = false;
+};
