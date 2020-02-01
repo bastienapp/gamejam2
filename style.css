@@ -1,0 +1,59 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.center-terrain {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.grid-terrain {
+    width: 1000px;
+    height: 561px;
+    background-image: url("image/versailles.jpg");
+    display: grid;
+    grid-template: 140px 140px 140px 1fr / 500px 500px;
+    grid-template-areas: "1A 1A" "2A 2B" "3A 3B" "4A 4B";
+}
+
+.grid-terrain > div {
+    border: 1px dashed red;
+}
+
+.g1A {
+    grid-area: g1A;
+}
+
+.g1B {
+    grid-area: g1B;
+}
+
+.g2A {
+    grid-area: g2A;
+}
+
+.g2B {
+    grid-area: g2B;
+}
+
+.g3A {
+    grid-area: g3A;
+}
+
+.g3B {
+    grid-area: g3B;
+}
+
+.g4A {
+    grid-area: g4A;
+}
+
+.g4B {
+    grid-area: g4B;
+}
+
