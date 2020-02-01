@@ -14,6 +14,7 @@ class Play {
         this._unitPlaced = 0;
         this._currentUnitType = undefined;
         this._alreadyMove = false;
+        this._annuncement = document.getElementById("annunce").textContent = "Le joueur 1 positionne ces troupes";
 
         this._main = main;
 
@@ -40,7 +41,7 @@ class Play {
             }
             if (!this._initialized) {
                 if (this._currentUnitType === undefined) {
-                    alert("Choisi d'abord un type d'unité !")
+                    alert("Choisi d'abord un type d'unité !");
                     return;
                 }
                 let unit = new Dps(posX, posY, this._currentPlayer);
@@ -61,7 +62,7 @@ class Play {
                     }
                 }
                 this._draw();
-                document.getElementById("current-player").innerHTML = "" + (this._currentPlayer + 1)
+                document.getElementById("current-player").innerHTML = "" + (this._currentPlayer + 1);
                 return;
             }
             // TODO recuperer la case correspondant à la position
@@ -75,11 +76,15 @@ class Play {
                     }
                 } else if (square2.unit.player !== this._playerTurn) {
                     this.attack(this._selected, square2);
+                } else if (square2.unit.player === this._playerTurn) {
+
+                    this._selected = square2.unit.player;
                 }
             } else {
                 let square = this._map[posX][posY];
                 if (square.unit.player === this._playerTurn) {
                     this._selected = square.unit;
+                    this._annuncement = "l'unité "+this._selected.name+" du joueur est séléctionnée";
                     console.log(this._selected);
                 } else {
                     alert("t'est trop con, c'est pas ton unité");
@@ -88,7 +93,7 @@ class Play {
         });
     }
 
-    play () {
+    play() {
         this._draw();
 
         const placeDps = document.getElementById("place-dps");
@@ -152,35 +157,37 @@ Play.prototype.goto = function (unit, square) {
 
 Play.prototype.attack = function (unitCurrentPlayer, square) {
     let unitOpponent = square.unit;
-    if(this.distance(square.positionX, square.positionY, unitCurrentPlayer.posX, unitCurrentPlayer.posY) <= unitCurrentPlayer.reach) {
+    if (this.distance(square.positionX, square.positionY, unitCurrentPlayer.posX, unitCurrentPlayer.posY) <= unitCurrentPlayer.reach) {
         unitOpponent.life -= unitCurrentPlayer.damage;
+        this._annuncement = "Il reste " + unitOpponent.life+ " à l'unité";
         if (unitOpponent.life <= 0) {
             this.disparition(square);
             this.switchPlayerTurn();
+            this._annuncement = "L'unité est morte !";
         }
     } else {
         alert("T'es trop loin pour attaquer cette unité");
     }
 };
 
-Play.prototype.disparition = function(square) {
+Play.prototype.disparition = function (square) {
     square.unit = undefined;
     this._map[square.positionX][square.positionY].unit = undefined;
     this._draw();
 };
 
-Play.prototype.distance = function(targetX, targetY, startX, startY) {
+Play.prototype.distance = function (targetX, targetY, startX, startY) {
 
     return Math.abs(targetX - startX) + Math.abs(targetY - startY);
 };
 
-Play.prototype.checkAttack = function(player) {
-    for(i = 0; i < this._gridSize; i++){
-        for(j = 0; j < this._gridSize; j++){
+Play.prototype.checkAttack = function (player) {
+    for (let i = 0; i < this._gridSize; i++) {
+        for (let j = 0; j < this._gridSize; j++) {
             let unit = this._map[i][j].unit;
-            if(unit !==undefined && unit.player === player){
+            if (unit !== undefined && unit.player === player) {
                 let possibleAttack = this.checkAttackOneUnit(unit);
-                if(possibleAttack){
+                if (possibleAttack) {
                     return true;
                 }
             }
@@ -189,18 +196,20 @@ Play.prototype.checkAttack = function(player) {
     return false;
 };
 
-Play.prototype.checkAttackOneUnit = function(unit){
+Play.prototype.checkAttackOneUnit = function (unit) {
     let playerPotentialyAttacked = 0;
-    if(unit.player === 0){
+    if (unit.player === 0) {
         playerPotentialyAttacked = 1;
     }
     //lister les unités de ce jour
-    for(i = 0; i < this._gridSize; i++){
-        for(j = 0; j < this._gridSize; j++){
-            let unitAttackedPlayer = this._map[i][j].unit;
-            if(unitAttackedPlayer.player === playerPotentialyAttacked){
-                if(this.distance(unit.posX, unit.posY, unitAttackedPlayer.posX, unitAttackedPlayer.posY) <= unit.reach){
-                    return true;
+    for (let i = 0; i < this._gridSize; i++) {
+        for (let j = 0; j < this._gridSize; j++) {
+            if (this._map[i][j].unit !== undefined) {
+                let unitAttackedPlayer = this._map[i][j].unit;
+                if (unitAttackedPlayer.player === playerPotentialyAttacked) {
+                    if (this.distance(unit.posX, unit.posY, unitAttackedPlayer.posX, unitAttackedPlayer.posY) <= unit.reach) {
+                        return true;
+                    }
                 }
             }
         }

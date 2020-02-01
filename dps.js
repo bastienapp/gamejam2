@@ -6,5 +6,6 @@ class Dps extends Unit {
         this._damage = 4;
         this._reach = 2;
         this._life = 12;
+        this._name = "Dps";
     }
 }

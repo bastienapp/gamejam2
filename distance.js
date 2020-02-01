@@ -6,5 +6,6 @@ class Distance extends Unit {
         this._damage = 4;
         this._reach = 4;
         this._life = 8;
+        this._name = "Distance";
     }
 }
