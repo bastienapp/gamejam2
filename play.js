@@ -102,8 +102,8 @@ Play.prototype.goto = function (unit, square) {
 
 Play.prototype.attack = function (unitCurrentPlayer, square) {
     let unitOpponent = square.unit;
+
     unitOpponent.life -= unitCurrentPlayer.damage;
-    console.log(unitOpponent);
     if (unitOpponent.life <= 0) {
         this.disparition(square);
     }
