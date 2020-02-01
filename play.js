@@ -1,8 +1,21 @@
 class Play {
-    constructor() {
-        let tacos = new Tank();
-        alert(tacos.life);
+
+    constructor(main) {
+
+        this._main = main;
+
+        let map = [
+            "      ",
+            "      ",
+            "      ",
+            "      ",
+            "      ",
+            "      "
+        ];
+
     }
 }
 
-const play = new Play();
+Play.prototype.play = function() {
+    console.log(this._main);
+};
