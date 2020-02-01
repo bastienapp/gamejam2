@@ -8,11 +8,12 @@ class Play {
         this._boxSize = 60;
         this._windowWidth = 720;
         this._windowHeight = 720;
-        this._initialized = false;
+        this._initialized = true;
         this._maxUnit = 3;
         this._currentPlayer = 0;
         this._unitPlaced = 0;
         this._currentUnitType = undefined;
+        this._alreadyMove = false;
 
         this._main = main;
 
@@ -63,6 +64,9 @@ class Play {
                 if (square2.unit === undefined) {
                     console.log(this._selected);
                     this.goto(this._selected, square2);
+                    if (!this.checkAttack(this._playerTurn)) {
+                        this.switchPlayerTurn();
+                    }
                 } else if (square2.unit.player !== this._playerTurn) {
                     this.attack(this._selected, square2);
                 }
@@ -117,13 +121,18 @@ Play.prototype.goto = function (unit, square) {
     let startY = unit.posY;
     let endX = square.positionX;
     let endY = square.positionY;
-    if (this.distance(endX, endY, startX, startY) <= unit.move) {
+    if (this.distance(endX, endY, startX, startY) <= unit.move && !this._alreadyMove) {
         this._map[startX][startY].unit = undefined;
         this._map[endX][endY].unit = unit;
         unit.posX = endX;
         unit.posY = endY;
         this._draw();
         this._selected = undefined;
+        this._alreadyMove = true;
+    } else if (this._alreadyMove) {
+
+        alert("Vous avez déjà bougé !")
+
     } else {
 
         alert("C'est trop loin !!!");
@@ -132,11 +141,15 @@ Play.prototype.goto = function (unit, square) {
 
 Play.prototype.attack = function (unitCurrentPlayer, square) {
     let unitOpponent = square.unit;
-    unitOpponent.life -= unitCurrentPlayer.damage;
-    console.log(unitOpponent);
-    if (unitOpponent.life <= 0) {
-        this.disparition(square);
+    if(this.distance(square.positionX, square.positionY, unitCurrentPlayer.posX, unitCurrentPlayer.posY) <= unitCurrentPlayer.reach) {
+        unitOpponent.life -= unitCurrentPlayer.damage;
+        if (unitOpponent.life <= 0) {
+            this.disparition(square);
+        }
+    } else {
+        alert("T'es trop loin pour attaquer cette unité");
     }
+    this.switchPlayerTurn();
 };
 
 Play.prototype.disparition = function(square) {
@@ -150,3 +163,48 @@ Play.prototype.distance = function(targetX, targetY, startX, startY) {
     return Math.abs(targetX - startX) + Math.abs(targetY - startY);
 };
 
+Play.prototype.checkAttack = function(player) {
+    for(i = 0; i < this._gridSize; i++){
+        for(j = 0; j < this._gridSize; j++){
+            let unit = this._map[i][j].unit;
+            if(unit !==undefined && unit.player === player){
+                let possibleAttack = this.checkAttackOneUnit(unit);
+                if(possibleAttack){
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+};
+
+Play.prototype.checkAttackOneUnit = function(unit){
+    let playerPotentialyAttacked = 0;
+    if(unit.player === 0){
+        playerPotentialyAttacked = 1;
+    }
+    //lister les unités de ce jour
+    for(i = 0; i < this._gridSize; i++){
+        for(j = 0; j < this._gridSize; j++){
+            let unitAttackedPlayer = this._map[i][j].unit;
+            if(unit.unitAttackedPlayer === playerPotentialyAttacked){
+                if(this.distance(unit.posX, unit.posY, unitAttackedPlayer.posX, unitAttackedPlayer.posY) <= unit.reach){
+                    return true;
+                }
+            }
+        }
+    }
+    return false
+};
+
+Play.prototype.switchPlayerTurn = function () {
+    if (this._playerTurn === 1) {
+
+        this._playerTurn = 0;
+    } else {
+
+        this._playerTurn = 1;
+    }
+    this._selected = undefined;
+    this._alreadyMove = false;
+};
