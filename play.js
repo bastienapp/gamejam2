@@ -102,13 +102,15 @@ Play.prototype.goto = function (unit, square) {
 
 Play.prototype.attack = function (unitCurrentPlayer, square) {
     console.log('attack');
-    unitOpponent = square.unitName;
+    let unitOpponent = square.unit;
+    console.log(unitOpponent);
     unitOpponent.life -= unitCurrentPlayer.damage;
+    console.log(unitOpponent);
     if (unitOpponent.life <= 0) {
         this.disparition(square);
     }
 };
 
 function disparition(square) {
-    square.unitName = undefined;
+    square.unit = undefined;
 }
