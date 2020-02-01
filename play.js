@@ -8,7 +8,7 @@ class Play {
         this._boxSize = 60;
         this._windowWidth = 720;
         this._windowHeight = 720;
-        this._initialized = true;
+        this._initialized = false;
         this._maxUnit = 3;
         this._currentPlayer = 0;
         this._unitPlaced = 0;
@@ -21,14 +21,7 @@ class Play {
         for (let i = 0; i < this._gridSize; i++) {
             this._map[i] = new Array(this._gridSize);
             for (let j = 0; j < this._gridSize; j++) {
-                let square = new Square(i, j);
-                if (i === 1 && j === 1) {
-                    square.unit = new Tank(i, j, 0);
-                }
-                if (i === 1 && j === 5) {
-                    square.unit = new Dps(i, j, 1);
-                }
-                this._map[i][j] = square;
+                this._map[i][j] = new Square(i, j);
             }
         }
         console.log(this._map);
@@ -42,11 +35,22 @@ class Play {
                     posX: posX,
                     posY: posY,
                 })
+            } else {
+                return;
             }
             if (!this._initialized) {
                 if (this._currentUnitType === undefined) {
+                    alert("Choisi d'abord un type d'unité !")
                     return;
                 }
+                let unit = new Dps(posX, posY, this._currentPlayer);
+                if (this._currentUnitType === "tank") {
+                    unit = new Tank(posX, posY, this._currentPlayer);
+                } else if (this._currentUnitType === "distance") {
+                    unit = new Distance(posX, posY, this._currentPlayer);
+                }
+                this._map[posX][posY].unit = unit;
+                this._currentUnitType = undefined;
                 this._unitPlaced++;
                 if (this._unitPlaced >= this._maxUnit) {
                     if (this._currentPlayer === 0) {
@@ -56,6 +60,8 @@ class Play {
                         this._initialized = true;
                     }
                 }
+                this._draw();
+                document.getElementById("current-player").innerHTML = "" + (this._currentPlayer + 1)
                 return;
             }
             // TODO recuperer la case correspondant à la position
@@ -90,8 +96,13 @@ class Play {
         const placeDistance = document.getElementById("place-distance");
 
         placeDps.addEventListener('click', event => {
-
-
+            this._currentUnitType = "dps";
+        });
+        placeTank.addEventListener('click', event => {
+            this._currentUnitType = "tank";
+        });
+        placeDistance.addEventListener('click', event => {
+            this._currentUnitType = "distance";
         });
     }
 }
