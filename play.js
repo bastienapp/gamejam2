@@ -2,6 +2,8 @@ class Play {
 
     constructor(main) {
 
+        this._boxSize = 30;
+
         this._main = main;
 
         this._map = [];
@@ -25,7 +27,21 @@ Play.prototype._draw = function () {
         for (let j = 0; j < this._map[i].length; j++) {
             const ctx = this._main.getContext('2d');
             ctx.fillStyle = (i + j) % 2 === 0 ? 'green' : 'yellow';
-            ctx.fillRect(i * 30, j * 30, 30, 30);
+            ctx.fillRect(i * this._boxSize, j * this._boxSize, this._boxSize, this._boxSize);
         }
     }
+
+    this._main.addEventListener('click', event => {
+        const posX = Math.ceil(event.offsetX / this._boxSize) - 1;
+        const posY = Math.ceil(event.offsetY / this._boxSize) - 1;
+        if (posY >= 0 && posY < this._map.length
+            && posX >= 0 && posX < this._map[posY].length
+        ) {
+            console.log({
+                posX: posX,
+                posY: posY,
+            })
+        }
+        // TODO action
+    });
 };
