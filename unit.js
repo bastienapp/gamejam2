@@ -1,12 +1,12 @@
 class Unit {
 
-    constructor() {
+    constructor(_posX,_posY) {
         this._move = 0;
         this._damage = 0;
         this._reach = 0;
         this._life = 0;
-        this._posX = 0;
-        this._posY = 0;
+        this._posX = _posX;
+        this._posY = _posY;
     }
 
     isMoving () {
