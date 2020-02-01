@@ -5,6 +5,8 @@ class Unit {
         this._damage = 0;
         this._reach = 0;
         this._life = 0;
+        this._posX = 0;
+        this._posY = 0;
     }
 
     isMoving () {
