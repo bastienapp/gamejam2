@@ -7,7 +7,6 @@ class Unit {
         this._life = 0;
         this._posX = _posX;
         this._posY = _posY;
-        this.player = _player;
         this._player = _player;
     }
 

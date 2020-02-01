@@ -46,21 +46,21 @@ Play.prototype._draw = function () {
 };
 
 function goTo(unit, square) {
-    let startX = unit.getPosX();
-    let startY = unit.getPosY();
-    let endX = square.getPositionX();
-    let endY = square.getPositionY();
+    let startX = unit.PosX;
+    let startY = unit.PosY;
+    let endX = square.positionX;
+    let endY = square.positionY;
 
     let moveX = endX - startX;
     if (moveX > 0) {
         for (i = startX; i <= endX; i++) {
-            unit.setPosX(i)
-            //setInterval(unit.setPosX(i), 1000);
+            unit.PosX = i;
+            //setInterval(unit.PosX(i), 1000);
         }
     } else {
         for (i = startX; i >= endX; i--) {
-            unit.setPosX(i)
-            //setInterval(unit.setPosX(i), 1000);
+            unit.PosX = i;
+            //setInterval(unit.PosX(i), 1000);
         }
     }
     //clearInterval(endX === startX)
@@ -68,14 +68,26 @@ function goTo(unit, square) {
     let moveY = endY - startY;
     if (moveY > 0) {
         for (i = startY; i <= endY; i++) {
-            unit.setPosY(i)
-            //setInterval(unit.setPosY(i), 1000);
+            unit.PosY = i;
+            //setInterval(unit.PosY(i), 1000);
         }
     } else {
         for (i = startY; i >= endY; i--) {
-            unit.setPosY(i)
-            //setInterval(unit.setPosY(i), 1000);
+            unit.PosY = i;
+            //setInterval(unit.PosY(i), 1000);
         }
     }
     //clearInterval(endX === startX)
+}
+
+function attack(unitCurrentPlayer, square) {
+    unitOpponent = square.unitName;
+    unitOpponent.life -= unitCurrentPlayer.damage;
+    if(unitOpponent.life<=0){
+        this.disparition(square);
+    }
+}
+
+function disparition(square) {
+    square.unitName = null;
 }

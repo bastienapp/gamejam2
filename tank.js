@@ -8,5 +8,6 @@ class Tank extends Unit {
         this._life = 12;
         this._posX = _posX;
         this._posY = _posY;
+        this._sprite = url;
     }
 }
