@@ -10,6 +10,7 @@ class Play {
         this._boxSize = 60;
         this._windowWidth = 1024;
         this._windowHeight = 1024;
+        this._alreadyMove = false;
 
 
         this._main = main;
@@ -91,13 +92,18 @@ Play.prototype.goto = function (unit, square) {
     let startY = unit.posY;
     let endX = square.positionX;
     let endY = square.positionY;
-    if (this.distance(endX, endY, startX, startY) <= unit.move) {
+    if (this.distance(endX, endY, startX, startY) <= unit.move && !this._alreadyMove) {
         this._map[startX][startY].unit = undefined;
         this._map[endX][endY].unit = unit;
         unit.posX = endX;
         unit.posY = endY;
         this._draw();
         this._selected = undefined;
+        this._alreadyMove = true;
+    } else if (this._alreadyMove) {
+
+        alert("Vous avez déjà bougé !")
+
     } else {
 
         alert("C'est trop loin !!!");
@@ -119,6 +125,7 @@ Play.prototype.attack = function (unitCurrentPlayer, square) {
         this._playerTurn = 1;
     }
     this._selected = undefined;
+    this._alreadyMove = false;
 };
 
 Play.prototype.disparition = function(square) {
