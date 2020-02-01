@@ -7,6 +7,12 @@ class Unit {
         this._life = 0;
     }
 
+    isMoving () {
+    }
+
+    attack () {
+    }
+
     get move() {
         return this._move;
     }
