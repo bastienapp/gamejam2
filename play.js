@@ -145,11 +145,11 @@ Play.prototype.attack = function (unitCurrentPlayer, square) {
         unitOpponent.life -= unitCurrentPlayer.damage;
         if (unitOpponent.life <= 0) {
             this.disparition(square);
+            this.switchPlayerTurn();
         }
     } else {
         alert("T'es trop loin pour attaquer cette unité");
     }
-    this.switchPlayerTurn();
 };
 
 Play.prototype.disparition = function(square) {
@@ -187,7 +187,7 @@ Play.prototype.checkAttackOneUnit = function(unit){
     for(i = 0; i < this._gridSize; i++){
         for(j = 0; j < this._gridSize; j++){
             let unitAttackedPlayer = this._map[i][j].unit;
-            if(unit.unitAttackedPlayer === playerPotentialyAttacked){
+            if(unitAttackedPlayer.player === playerPotentialyAttacked){
                 if(this.distance(unit.posX, unit.posY, unitAttackedPlayer.posX, unitAttackedPlayer.posY) <= unit.reach){
                     return true;
                 }
@@ -199,7 +199,6 @@ Play.prototype.checkAttackOneUnit = function(unit){
 
 Play.prototype.switchPlayerTurn = function () {
     if (this._playerTurn === 1) {
-
         this._playerTurn = 0;
     } else {
 
