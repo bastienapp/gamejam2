@@ -1,13 +1,13 @@
 class Unit {
 
-    constructor(_posX,_posY, _player) {
+    constructor(posX, posY, player) {
         this._move = 0;
         this._damage = 0;
         this._reach = 0;
         this._life = 0;
-        this._posX = _posX;
-        this._posY = _posY;
-        this._player = _player;
+        this._posX = posX;
+        this._posY = posY;
+        this._player = player;
     }
 
     get move() {
