@@ -111,6 +111,14 @@ Play.prototype.attack = function (unitCurrentPlayer, square) {
     if (unitOpponent.life <= 0) {
         this.disparition(square);
     }
+    if (this._playerTurn === 1) {
+
+        this._playerTurn = 0;
+    } else {
+
+        this._playerTurn = 1;
+    }
+    this._selected = undefined;
 };
 
 Play.prototype.disparition = function(square) {
