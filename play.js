@@ -4,15 +4,17 @@ class Play {
 
         this._gridSize = 9;
         this._boxSize = 30;
+        this._selected = undefined;
+        this._playerTurn = 0;
 
         this._main = main;
 
         this._map = [];
         for (let i = 0; i < this._gridSize; i++) {
-            this._map[i] = new Array( this._gridSize);
+            this._map[i] = new Array(this._gridSize);
             for (let j = 0; j < this._gridSize; j++) {
                 let square = new Square(i, j);
-                if (i === 3 && j === 2) {
+                if (i === 1 && j === 1) {
                     square.unit = new Tank(i, j, 0);
                 }
                 if (i === 1 && j === 5) {
@@ -21,7 +23,7 @@ class Play {
                 this._map[i][j] = square;
             }
         }
-
+        console.log(this._map);
         this._main.addEventListener('click', event => {
             const posX = Math.ceil(event.offsetX / this._boxSize) - 1;
             const posY = Math.ceil(event.offsetY / this._boxSize) - 1;
@@ -33,7 +35,24 @@ class Play {
                     posY: posY,
                 })
             }
-            // TODO action
+            // TODO recuperer la case correspondant à la position
+            if (this._selected !== undefined) {
+                let square2 = this._map[posX][posY];
+                if(square2.unit === undefined){
+                    console.log(this._selected);
+                    this.goto(this._selected, square2);
+                } else if(square2.unit.player !== this._playerTurn) {
+                    this.attack(this._selected, square2);
+                }
+            } else {
+                let square = this._map[posX][posY];
+                if(square.unit.player === this._playerTurn) {
+                    this._selected = square.unit;
+                    console.log(this._selected);
+                } else {
+                    alert("t'est trop con, c'est pas ton unité");
+                }
+            }
         });
     }
 }
@@ -62,49 +81,26 @@ Play.prototype._draw = function () {
     }
 };
 
-function goTo(unit, square) {
-    let startX = unit.PosX;
-    let startY = unit.PosY;
+Play.prototype.goto = function (unit, square) {
+    let startX = unit.posX;
+    let startY = unit.posY;
     let endX = square.positionX;
     let endY = square.positionY;
 
-    let moveX = endX - startX;
-    if (moveX > 0) {
-        for (i = startX; i <= endX; i++) {
-            unit.PosX = i;
-            //setInterval(unit.PosX(i), 1000);
-        }
-    } else {
-        for (i = startX; i >= endX; i--) {
-            unit.PosX = i;
-            //setInterval(unit.PosX(i), 1000);
-        }
-    }
-    //clearInterval(endX === startX)
+    this._map[startX][startY].unit = undefined;
+    this._map[endX][endY].unit = unit;
+    this._draw();
 
-    let moveY = endY - startY;
-    if (moveY > 0) {
-        for (i = startY; i <= endY; i++) {
-            unit.PosY = i;
-            //setInterval(unit.PosY(i), 1000);
-        }
-    } else {
-        for (i = startY; i >= endY; i--) {
-            unit.PosY = i;
-            //setInterval(unit.PosY(i), 1000);
-        }
-    }
-    //clearInterval(endX === startX)
-}
+};
 
-function attack(unitCurrentPlayer, square) {
+Play.prototype.attack = function (unitCurrentPlayer, square) {
     unitOpponent = square.unitName;
     unitOpponent.life -= unitCurrentPlayer.damage;
-    if(unitOpponent.life<=0){
+    if (unitOpponent.life <= 0) {
         this.disparition(square);
     }
-}
+};
 
 function disparition(square) {
-    square.unitName = null;
+    square.unitName = undefined;
 }
