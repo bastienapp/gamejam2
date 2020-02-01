@@ -43,15 +43,15 @@ class Play {
             // TODO recuperer la case correspondant à la position
             if (this._selected !== undefined) {
                 let square2 = this._map[posX][posY];
-                if(square2.unit === undefined){
+                if (square2.unit === undefined) {
                     console.log(this._selected);
                     this.goto(this._selected, square2);
-                } else if(square2.unit.player !== this._playerTurn) {
+                } else if (square2.unit.player !== this._playerTurn) {
                     this.attack(this._selected, square2);
                 }
             } else {
                 let square = this._map[posX][posY];
-                if(square.unit.player === this._playerTurn) {
+                if (square.unit.player === this._playerTurn) {
                     this._selected = square.unit;
                     console.log(this._selected);
                 } else {
@@ -94,11 +94,14 @@ Play.prototype.goto = function (unit, square) {
 
     this._map[startX][startY].unit = undefined;
     this._map[endX][endY].unit = unit;
+    unit.posX = endX;
+    unit.posY = endY;
     this._draw();
-
+    this._selected = undefined;
 };
 
 Play.prototype.attack = function (unitCurrentPlayer, square) {
+    console.log('attack');
     unitOpponent = square.unitName;
     unitOpponent.life -= unitCurrentPlayer.damage;
     if (unitOpponent.life <= 0) {
