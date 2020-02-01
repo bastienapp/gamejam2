@@ -127,3 +127,5 @@ Play.prototype.distance = function(targetX, targetY, startX, startY) {
     return Math.abs(targetX - startX) + Math.abs(targetY - startY);
 };
 
+
+
