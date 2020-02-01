@@ -2,8 +2,10 @@ class Play {
 
     constructor(main) {
 
-        this._gridSize = 9;
-        this._boxSize = 30;
+        this._gridSize = 12;
+        this._boxSize = 60;
+        this._windowWidth = 1024;
+        this._windowHeight = 1024;
 
         this._main = main;
 
@@ -43,8 +45,8 @@ Play.prototype.play = function () {
 };
 
 Play.prototype._draw = function () {
-    this._main.width = 800;
-    this._main.height = 600;
+    this._main.width = this._windowWidth;
+    this._main.height = this._windowHeight;
     this._main.zIndex = 0;
 
     for (let i = 0; i < this._map.length; i++) {
