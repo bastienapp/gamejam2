@@ -64,7 +64,7 @@ class Play {
                 if (square2.unit === undefined) {
                     console.log(this._selected);
                     this.goto(this._selected, square2);
-                    if (!this.checkAttack(this._playerTurn)) {
+                    if (!this.checkAttack(this._playerTurn) && this._alreadyMove) {
                         this.switchPlayerTurn();
                     }
                 } else if (square2.unit.player !== this._playerTurn) {
