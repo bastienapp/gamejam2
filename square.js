@@ -1,4 +1,4 @@
-class Case {
+class Square {
 
     constructor(positionX, positionY) {
         this._field = 0;

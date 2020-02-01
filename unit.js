@@ -9,12 +9,6 @@ class Unit {
         this._posY = _posY;
     }
 
-    isMoving () {
-    }
-
-    attack () {
-    }
-
     get move() {
         return this._move;
     }
@@ -45,5 +39,21 @@ class Unit {
 
     set life(value) {
         this._life = value;
+    }
+
+    get posX() {
+        return this._posX;
+    }
+
+    set posX(value) {
+        this._posX = value;
+    }
+
+    get posY() {
+        return this._posY;
+    }
+
+    set posY(value) {
+        this._posY = value;
     }
 }
