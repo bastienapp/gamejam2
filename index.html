@@ -3,11 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Tester</title>
-    <script type="text/javascript" src="unit.js"></script>
-    <script type="text/javascript" src="tank.js"></script>
     <script type="text/javascript" src="play.js"></script>
 </head>
 <body>
 
+<canvas id="main"></canvas>
+
+<script type="text/javascript">
+
+    const play = new Play(document.getElementById("main"));
+    play.play();
+
+</script>
 </body>
 </html>
