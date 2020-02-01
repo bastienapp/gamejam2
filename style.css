@@ -10,16 +10,16 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    background-color: white;
 }
 
 #main {
-    background-color: limegreen;
     grid-column: 1 / 13;
     grid-row: 1 / 13;
+    position: absolute;
 }
 
 .grid-terrain {
+    background-color: limegreen;
     width: 720px;
     height: 720px;
     display: grid;

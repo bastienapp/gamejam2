@@ -2,16 +2,18 @@ class Play {
 
     constructor(main) {
 
-        this._gridSize = 9;
-        this._boxSize = 30;
         this._selected = undefined;
         this._playerTurn = 0;
         this._gridSize = 12;
         this._boxSize = 60;
-        this._windowWidth = 1024;
-        this._windowHeight = 1024;
+        this._windowWidth = 720;
+        this._windowHeight = 720;
+        this._initialized = true;
+        this._maxUnit = 3;
+        this._currentPlayer = 0;
+        this._unitPlaced = 0;
+        this._currentUnitType = undefined;
         this._alreadyMove = false;
-
 
         this._main = main;
 
@@ -41,13 +43,28 @@ class Play {
                     posY: posY,
                 })
             }
+            if (!this._initialized) {
+                if (this._currentUnitType === undefined) {
+                    return;
+                }
+                this._unitPlaced++;
+                if (this._unitPlaced >= this._maxUnit) {
+                    if (this._currentPlayer === 0) {
+                        this._unitPlaced = 0;
+                        this._currentPlayer = 1;
+                    } else {
+                        this._initialized = true;
+                    }
+                }
+                return;
+            }
             // TODO recuperer la case correspondant à la position
             if (this._selected !== undefined) {
                 let square2 = this._map[posX][posY];
                 if (square2.unit === undefined) {
                     console.log(this._selected);
                     this.goto(this._selected, square2);
-                    if(!this.checkAttack(this._playerTurn)) {
+                    if (!this.checkAttack(this._playerTurn)) {
                         this.switchPlayerTurn();
                     }
                 } else if (square2.unit.player !== this._playerTurn) {
@@ -64,11 +81,20 @@ class Play {
             }
         });
     }
-}
 
-Play.prototype.play = function () {
-    this._draw();
-};
+    play () {
+        this._draw();
+
+        const placeDps = document.getElementById("place-dps");
+        const placeTank = document.getElementById("place-tank");
+        const placeDistance = document.getElementById("place-distance");
+
+        placeDps.addEventListener('click', event => {
+
+
+        });
+    }
+}
 
 Play.prototype._draw = function () {
     this._main.width = this._windowWidth;
