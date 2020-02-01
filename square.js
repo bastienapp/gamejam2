@@ -1,8 +1,8 @@
 class Square {
 
     constructor(positionX, positionY) {
-        this._field = 0;
-        this._unitName = 0;
+        this._field = undefined;
+        this._unit = undefined;
         this._positionX = positionX;
         this._positionY = positionY;
     }
@@ -15,12 +15,12 @@ class Square {
         this._field = value;
     }
 
-    get unitName() {
-        return this._unitName;
+    get unit() {
+        return this._unit;
     }
 
-    set unitName(value) {
-        this._unitName = value;
+    set unit(value) {
+        this._unit = value;
     }
 
     get positionX() {
