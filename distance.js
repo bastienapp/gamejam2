@@ -10,6 +10,8 @@ class Distance extends Unit {
         this._posX = posX;
         this._posY = posY;
         this._player = player;
+        this._redSprite = "image/RedDistance.png";
+        this._blueSprite = "image/BlueDistance.png";
     }
 
     get posX() {
@@ -70,5 +72,21 @@ class Distance extends Unit {
 
     get name() {
         return this._name;
+    }
+
+    get redSprite() {
+        return this._redSprite;
+    }
+
+    set redSprite(value) {
+        this._redSprite = value;
+    }
+
+    get blueSprite() {
+        return this._blueSprite;
+    }
+
+    set blueSprite(value) {
+        this._blueSprite = value;
     }
 }

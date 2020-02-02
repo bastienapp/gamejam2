@@ -10,6 +10,8 @@ class Dps extends Unit {
         this._posX = posX;
         this._posY = posY;
         this._player = player;
+        this._redSprite = "image/RedDPS.png";
+        this._blueSprite = "image/BlueDPS.png";
     }
 
     get posX() {
@@ -74,5 +76,21 @@ class Dps extends Unit {
 
     set name(value) {
         this._name = value;
+    }
+
+    get redSprite() {
+        return this._redSprite;
+    }
+
+    set redSprite(value) {
+        this._redSprite = value;
+    }
+
+    get blueSprite() {
+        return this._blueSprite;
+    }
+
+    set blueSprite(value) {
+        this._blueSprite = value;
     }
 }

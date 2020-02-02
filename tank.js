@@ -10,6 +10,8 @@ class Tank extends Unit {
         this._posX = posX;
         this._posY = posY;
         this._player = player;
+        this._redSprite = "image/RedTank.png";
+        this._blueSprite = "image/BlueTank.png";
     }
 
 
@@ -75,5 +77,21 @@ class Tank extends Unit {
 
     set name(value) {
         this._name = value;
+    }
+
+    get redSprite() {
+        return this._redSprite;
+    }
+
+    set redSprite(value) {
+        this._redSprite = value;
+    }
+
+    get blueSprite() {
+        return this._blueSprite;
+    }
+
+    set blueSprite(value) {
+        this._blueSprite = value;
     }
 }
