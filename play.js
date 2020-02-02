@@ -27,16 +27,23 @@ class Play {
                 this._map[i][j] = new Square(i, j);
             }
         }
-        console.log(this._map);
         this._main.addEventListener('click', event => {
             const posX = Math.ceil(event.offsetX / this._boxSize) - 1;
             const posY = Math.ceil(event.offsetY / this._boxSize) - 1;
             if (posY >= 0 && posY < this._map.length
                 && posX >= 0 && posX < this._map[posY].length
             ) {
+                let x = event.pageX;
+                let y = event.pageY;
+                let larg = (this._main.offsetLeft);
+                let haut = (this._main.offsetTop);
                 console.log({
                     posX: posX,
                     posY: posY,
+                    x,
+                    y,
+                    larg,
+                    haut
                 })
             } else {
                 return;
@@ -136,8 +143,13 @@ Play.prototype._draw = function () {
 
             const square = this._map[i][j];
             if (square.unit !== undefined) {
-                ctx.fillStyle = square.unit.player === 0 ? 'green' : 'yellow';
-                ctx.fillRect(i * this._boxSize, j * this._boxSize, this._boxSize, this._boxSize);
+                let blueSprite = new Image();
+                let redSprite = new Image();
+                blueSprite.src = square.unit.blueSprite;
+                redSprite.src = square.unit.redSprite;
+                console.log(this.findTheSquareX(square),this.findTheSquareY(square));
+                square.unit.player === 0 ? ctx.drawImage(redSprite,this.findTheSquareX(square) ,this.findTheSquareY(square) ,80,80) : ctx.drawImage(redSprite,this.findTheSquareX(square) ,this.findTheSquareY(square) ,80,80);
+                //ctx.fillRect(i * this._boxSize, j * this._boxSize, this._boxSize, this._boxSize);
             }
         }
     }
@@ -245,4 +257,14 @@ Play.prototype.switchPlayerTurn = function () {
     this._annuncementCurrentPlayer.textContent = "Au tour du joueur "+this._playerTurn;
     this._annuncementUnit.textContent = "";
     this._draw();
+};
+
+Play.prototype.findTheSquareX = function (square) {
+
+    return (square.positionX*this._boxSize);
+};
+
+Play.prototype.findTheSquareY = function (square) {
+
+    return (square.positionY*this._boxSize);
 };
