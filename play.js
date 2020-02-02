@@ -14,8 +14,10 @@ class Play {
         this._unitPlaced = 0;
         this._currentUnitType = undefined;
         this._alreadyMove = false;
-        this._annuncement = document.getElementById("annunce").textContent = "Le joueur 1 positionne ces troupes";
-
+        this._alreadyAttack = false;
+        this._annuncementCurrentPlayer = document.getElementById("currentPlayer");
+        this._annuncementAction = document.getElementById("action");
+        this._annuncementUnit = document.getElementById("currentUnit");
         this._main = main;
 
         this._map = [];
@@ -69,23 +71,30 @@ class Play {
             if (this._selected !== undefined) {
                 let square2 = this._map[posX][posY];
                 if (square2.unit === undefined) {
-                    console.log(this._selected);
                     this.goto(this._selected, square2);
-                    if (!this.checkAttack(this._playerTurn) && this._alreadyMove) {
+                    if (!this.checkAttack(this._playerTurn) && this._alreadyMove || this._alreadyAttack && this._alreadyMove) {
                         this.switchPlayerTurn();
                     }
                 } else if (square2.unit.player !== this._playerTurn) {
                     this.attack(this._selected, square2);
+                    if (this._alreadyAttack && this._alreadyMove) {
+                        this.switchPlayerTurn();
+                    }
                 } else if (square2.unit.player === this._playerTurn) {
 
-                    this._selected = square2.unit.player;
+                    this._selected = square2.unit;
+                    this._annuncementUnit.textContent = "L'unité "+this._selected.name+" du joueur"+this._currentPlayer+" est séléctionnée: " +
+                        "deplacement: "+this._selected.move+"; life : "+this._selected.life+"; range : "+this._selected.reach+"; damages : "+this._selected.damage;
+                    this._draw();
                 }
             } else {
                 let square = this._map[posX][posY];
                 if (square.unit.player === this._playerTurn) {
                     this._selected = square.unit;
-                    this._annuncement = "l'unité "+this._selected.name+" du joueur est séléctionnée";
-                    console.log(this._selected);
+                    this._annuncementUnit.textContent = "L'unité "+this._selected.name+" du joueur"+this._currentPlayer+" est séléctionnée: " +
+                        "deplacement: "+this._selected.move+"; life : "+this._selected.life+"; range : "+this._selected.reach+"; damages : "+this._selected.damage;
+                    this._annuncementAction.textContent ="";
+                    this._draw();
                 } else {
                     alert("t'est trop con, c'est pas ton unité");
                 }
@@ -111,6 +120,8 @@ class Play {
         });
     }
 }
+
+
 
 Play.prototype._draw = function () {
     this._main.width = this._windowWidth;
@@ -159,11 +170,13 @@ Play.prototype.attack = function (unitCurrentPlayer, square) {
     let unitOpponent = square.unit;
     if (this.distance(square.positionX, square.positionY, unitCurrentPlayer.posX, unitCurrentPlayer.posY) <= unitCurrentPlayer.reach) {
         unitOpponent.life -= unitCurrentPlayer.damage;
-        this._annuncement = "Il reste " + unitOpponent.life+ " à l'unité";
+        this._annuncementAction.textContent = "Il reste " + unitOpponent.life+ " à l'unité";
+        this._draw();
+        this._alreadyAttack = true;
         if (unitOpponent.life <= 0) {
             this.disparition(square);
-            this.switchPlayerTurn();
-            this._annuncement = "L'unité est morte !";
+            this._annuncementAction.textContent = "L'unité est morte !";
+            this._draw();
         }
     } else {
         alert("T'es trop loin pour attaquer cette unité");
@@ -193,6 +206,8 @@ Play.prototype.checkAttack = function (player) {
             }
         }
     }
+    this._annuncementAction.textContent = "Aucune unité à porté d'attaque !";
+    this._draw();
     return false;
 };
 
@@ -226,4 +241,8 @@ Play.prototype.switchPlayerTurn = function () {
     }
     this._selected = undefined;
     this._alreadyMove = false;
+    this._alreadyAttack = false;
+    this._annuncementCurrentPlayer.textContent = "Au tour du joueur "+this._playerTurn;
+    this._annuncementUnit.textContent = "";
+    this._draw();
 };

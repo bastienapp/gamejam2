@@ -626,3 +626,11 @@
 .g1212 {
     grid-area: g1212;
 }
+
+.divAnnonce {
+
+    position: absolute;
+    margin-top:260px;
+    width: 20vw;
+    margin-left: 10px;
+}
