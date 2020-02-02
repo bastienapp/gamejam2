@@ -4,8 +4,8 @@ class Tank extends Unit {
         super(posX, posY, player);
         this._move = 1;
         this._damage = 4;
-        this._reach = 2;
-        this._life = 12;
+        this._reach = 1;
+        this._life = 20;
         this._name = "Tank";
         this._posX = posX;
         this._posY = posY;
